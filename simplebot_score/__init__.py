@@ -122,7 +122,7 @@ def score_cmd(bot: DeltaBot, payload: str, message: Message, replies: Replies) -
     with session_scope() as session:
         user = session.query(User).filter_by(addr=addr).first()
         score = user.score if user else 0
-        total_score = session.query(func.sum(User.score)).scalar()
+        total_score = session.query(func.sum(User.score)).filter(User.score > 0).scalar()
     name = bot.get_contact(addr).name
     badge = _getdefault(bot, "score_badge")
     replies.add(text=f"{name}: {score}/{total_score}{badge}")
