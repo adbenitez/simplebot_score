@@ -23,16 +23,13 @@ def load_requirements(path: str) -> list:
 if __name__ == "__main__":
     MODULE_NAME = "simplebot_score"
     DESC = "score/reputation tracker (SimpleBot plugin)"
-    URL = "https://github.com/adbenitez/" + MODULE_NAME
 
     init_file = os.path.join(MODULE_NAME, "__init__.py")
     with open(init_file) as fh:
         version = re.search(r"__version__ = \"(.*?)\"", fh.read(), re.M).group(1)
 
-    with open("README.rst") as fh:
+    with open("README.rst", encoding="utf-8") as fh:
         long_description = fh.read()
-    with open("CHANGELOG.rst") as fh:
-        long_description += "\n" + fh.read()
 
     setup(
         name=MODULE_NAME,
@@ -42,7 +39,7 @@ if __name__ == "__main__":
         long_description_content_type="text/x-rst",
         author="adbenitez",
         author_email="adbenitez@nauta.cu",
-        url=URL,
+        url=f"https://github.com/adbenitez/{MODULE_NAME}",
         keywords="simplebot plugin deltachat",
         license="MPL",
         classifiers=[
@@ -62,6 +59,6 @@ if __name__ == "__main__":
             "dev": load_requirements("requirements/requirements-dev.txt"),
         },
         entry_points={
-            "simplebot.plugins": "{0} = {0}".format(MODULE_NAME),
+            "simplebot.plugins": f"{MODULE_NAME} = {MODULE_NAME}",
         },
     )
