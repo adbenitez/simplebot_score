@@ -49,7 +49,7 @@ def filter_messages(bot: DeltaBot, message: Message, replies: Replies) -> None:
         return
     sender_addr = message.get_sender_contact().addr
     is_admin = bot.is_admin(sender_addr)
-    if (score < 0 and not is_admin) or sender_addr == receiver_addr:
+    if not is_admin and (score < 0 or sender_addr == receiver_addr):
         return
 
     with session_scope() as session:
@@ -85,28 +85,6 @@ def filter_messages(bot: DeltaBot, message: Message, replies: Replies) -> None:
         _getdefault(bot, "score_badge"),
     )
     replies.add(text=text, quote=message)
-
-
-@simplebot.command(name="/scoreSet", admin=True)
-def scoreset_cmd(bot: DeltaBot, args: list, message: Message, replies: Replies) -> None:
-    """Set score for given address.
-
-    Example: `/scoreSet foo@example.com 100`
-    """
-    score = _parse(args[1] if args[1].startswith(("+", "-")) else "+" + args[1])
-    if not score:
-        replies.add(text="❌ Invalid number", quote=message)
-    else:
-        with session_scope() as session:
-            user = session.query(User).filter_by(addr=args[0]).first()
-            if not user:
-                user = User(addr=args[0])
-                session.add(user)
-            user.score += score
-            score = user.score
-        name = bot.get_contact(args[0]).name
-        text = f"{name}: {score}{_getdefault(bot, 'score_badge')}"
-        replies.add(text=text, quote=message)
 
 
 @simplebot.command(name="/score")
