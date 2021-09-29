@@ -2,13 +2,18 @@ import os
 
 import simplebot
 from deltachat import Message
+from pkg_resources import DistributionNotFound, get_distribution
 from simplebot import DeltaBot
 from simplebot.bot import Replies
 from sqlalchemy import func
 
 from .orm import User, init, session_scope
 
-__version__ = "1.0.0"
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    __version__ = "0.0.0.dev0-unknown"
 
 
 @simplebot.hookimpl
