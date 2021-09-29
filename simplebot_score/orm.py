@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from threading import Lock
 
-from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
+from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import relationship, sessionmaker
 
@@ -22,8 +22,7 @@ class User(Base):
     score = Column(Integer, nullable=False, default=0)
 
     def __init__(self, **kwargs):
-        if "score" not in kwargs:
-            kwargs["score"] = 0
+        kwargs.setdefault("score", 0)
         super().__init__(**kwargs)
 
 
