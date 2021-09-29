@@ -1,3 +1,5 @@
+"""hooks, filters and commands definitions."""
+
 import os
 
 import simplebot
@@ -85,8 +87,8 @@ def filter_messages(bot: DeltaBot, message: Message, replies: Replies) -> None:
     replies.add(text=text, quote=message)
 
 
-@simplebot.command(admin=True)
-def scoreSet(bot: DeltaBot, args: list, message: Message, replies: Replies) -> None:
+@simplebot.command(name="/scoreSet", admin=True)
+def scoreset_cmd(bot: DeltaBot, args: list, message: Message, replies: Replies) -> None:
     """Set score for given address.
 
     Example: `/scoreSet foo@example.com 100`
@@ -103,12 +105,12 @@ def scoreSet(bot: DeltaBot, args: list, message: Message, replies: Replies) -> N
             user.score += score
             score = user.score
         name = bot.get_contact(args[0]).name
-        text = "{}: {}{}".format(name, score, _getdefault(bot, "score_badge"))
+        text = f"{name}: {score}{_getdefault(bot, 'score_badge')}"
         replies.add(text=text, quote=message)
 
 
-@simplebot.command
-def score(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
+@simplebot.command(name="/score")
+def score_cmd(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
     """Get score of given address or your current score if no address is given.
 
     Example: `/score`
@@ -123,7 +125,7 @@ def score(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> No
         total_score = session.query(func.sum(User.score)).scalar()
     name = bot.get_contact(addr).name
     badge = _getdefault(bot, "score_badge")
-    replies.add(text="{0}: {1}/{2}{3}".format(name, score, total_score, badge))
+    replies.add(text=f"{name}: {score}/{total_score}{badge}")
 
 
 def _getdefault(bot: DeltaBot, key: str, value: str = None) -> str:
