@@ -19,16 +19,6 @@ class TestPlugin:
         msg = mocker.get_one_reply(f"/score", addr=admin)
         assert "4" in msg.text
 
-    def test_scoreSet(self, mocker) -> None:
-        admin = "admin1@example.org"
-        user = "user1@example.org"
-        mocker.bot.add_admin(admin)
-
-        msg = mocker.get_one_reply(f"/scoreSet {user} 50", addr=admin)
-        assert "50" in msg.text
-        msg = mocker.get_one_reply("/score", addr=user)
-        assert "50" in msg.text
-
     def test_filter(self, mocker) -> None:
         user = "user1@example.org"
         admin = "admin1@example.org"
