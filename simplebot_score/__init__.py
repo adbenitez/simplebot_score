@@ -25,7 +25,7 @@ def deltabot_start(bot: DeltaBot) -> None:
     init(f"sqlite:///{path}")
 
 
-@simplebot.filter(name=__name__)
+@simplebot.filter
 def filter_messages(bot: DeltaBot, message: Message, replies: Replies) -> None:
     """Detect messages like +1 or -1 to increase/decrease score."""
     if message.quote:
