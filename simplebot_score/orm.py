@@ -1,18 +1,21 @@
+"""database"""
+
 from contextlib import contextmanager
 from threading import Lock
 
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
-from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 
+# pylama:ignore=R0903
 class Base:
     @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
+    def __tablename__(cls):  # noqa
+        return cls.__name__.lower()  # noqa
 
 
-Base = declarative_base(cls=Base)
+Base = declarative_base(cls=Base)  # noqa
 _Session = sessionmaker()
 _lock = Lock()
 
@@ -44,5 +47,5 @@ def session_scope():
 def init(path: str, debug: bool = False) -> None:
     """Initialize engine."""
     engine = create_engine(path, echo=debug)
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)  # noqa
     _Session.configure(bind=engine)
